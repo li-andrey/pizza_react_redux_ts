@@ -4,6 +4,21 @@
   ul {
     display: flex;
 
+    @media (max-width: 1300px) {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      grid-row-gap: 7px;
+    }
+
+    @media (max-width: 819px) {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      grid-row-gap: 10px;
+      grid-column-gap: 15px;
+    }
+
     li {
       background-color: #f9f9f9;
       padding: 13px 30px;
@@ -25,6 +40,10 @@
       &.active {
         background-color: #282828;
         color: #fff;
+      }
+
+      @media (max-width: 570px) {
+        padding: 7px 15px;
       }
     }
   }

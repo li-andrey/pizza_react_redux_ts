@@ -19,7 +19,7 @@ function PizzaItem({ title, price, types, sizes }) {
             <li
               key={typeId}
               onClick={() => setPizzaType(typeId)}
-              className={pizzaType == typeId ? "active" : ""}
+              className={pizzaType === typeId ? "active" : ""}
             >
               {pizzasTypes[typeId]}
             </li>

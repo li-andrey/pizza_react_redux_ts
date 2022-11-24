@@ -1,11 +1,12 @@
-import PizzaItem from "./PizzaItem";
-import pizzasDB from "../assets/pizzas.json";
-function PizzaList() {
+import PizzaItem from "./PizzaItem/index";
+import Skeleton from "./PizzaItem/Skeleton";
+
+function PizzaList({ pizzas, isLoading }) {
   return (
     <div className="content__items">
-      {pizzasDB.map((pizza) => (
-        <PizzaItem key={pizza.id} {...pizza} />
-      ))}
+      {isLoading
+        ? [...new Array(8)].map((_, i) => <Skeleton key={i} />)
+        : pizzas.map((pizza) => <PizzaItem key={pizza.id} {...pizza} />)}
     </div>
   );
 }
