@@ -1,17 +1,32 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem } from "../../redux/slices/cartSlice";
 
-function PizzaItem({ title, price, types, sizes }) {
+function PizzaItem({ id, title, price, imageUrl, types, sizes }) {
   const pizzasTypes = ["тонкое", "традиционное"];
   const [pizzaType, setPizzaType] = React.useState(0);
-  const [pizzaSizes, setPizzaSizes] = React.useState(0);
+  const [pizzaSize, setPizzaSize] = React.useState(0);
+  const dispatch = useDispatch();
+  const cartItem = useSelector((state) =>
+    state.cart.items.find((obj) => obj.id === id)
+  );
+  const addedItem = cartItem ? cartItem.count : 0;
+
+  const onClickAdd = () => {
+    const item = {
+      id,
+      title,
+      price,
+      imageUrl,
+      type: pizzasTypes[pizzaType],
+      size: sizes[pizzaSize],
+    };
+    dispatch(addItem(item));
+  };
 
   return (
     <div className="pizza-block">
-      <img
-        className="pizza-block__image"
-        src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
-        alt="Pizza"
-      />
+      <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
       <h4 className="pizza-block__title">{title}</h4>
       <div className="pizza-block__selector">
         <ul>
@@ -29,8 +44,8 @@ function PizzaItem({ title, price, types, sizes }) {
           {sizes.map((s, i) => (
             <li
               key={i}
-              onClick={() => setPizzaSizes(i)}
-              className={pizzaSizes === i ? "active" : ""}
+              onClick={() => setPizzaSize(i)}
+              className={pizzaSize === i ? "active" : ""}
             >
               {s}
             </li>
@@ -39,7 +54,10 @@ function PizzaItem({ title, price, types, sizes }) {
       </div>
       <div className="pizza-block__bottom">
         <div className="pizza-block__price">от {price} ₽</div>
-        <button className="button button--outline button--add">
+        <button
+          className="button button--outline button--add"
+          onClick={onClickAdd}
+        >
           <svg
             width="12"
             height="12"
@@ -53,7 +71,7 @@ function PizzaItem({ title, price, types, sizes }) {
             />
           </svg>
           <span>Добавить</span>
-          <i>0</i>
+          {addedItem > 0 && <i>{addedItem}</i>}
         </button>
       </div>
     </div>

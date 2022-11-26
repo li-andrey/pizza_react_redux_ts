@@ -33,4 +33,14 @@
       color: #7b7b7b;
     }
   }
+  @media (max-width: 767px) {
+    &__cart {
+      width: 70%;
+    }
+  }
+  @media (max-width: 570px) {
+    &__cart {
+      width: 90%;
+    }
+  }
 }
