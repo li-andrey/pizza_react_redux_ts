@@ -1,20 +1,25 @@
 import React from "react";
 import styles from "./searchBlock.module.scss";
-import { SearchContext } from "../../App";
+import debounce from "lodash.debounce";
+import { setSearchValue } from "../../redux/slices/filterSlice";
+import { useDispatch } from "react-redux";
 
 function SearchBlock() {
+  const dispatch = useDispatch();
   const [value, setValue] = React.useState("");
-  const { setSearchValue } = React.useContext(SearchContext);
+
   const inputRef = React.useRef();
 
-  function debounce(fn, ms) {
-    let timeout;
-    return () => {
-      const fnCall = () => fn.apply(this, arguments);
-      clearTimeout(timeout);
-      timeout = setTimeout(fnCall, ms);
-    };
-  }
+  // function debounce(fn, ms) {
+  //   let timeout;
+  //   return () => {
+  //     const fnCall = () => fn.apply(this, arguments);
+  //     console.log("333", arguments);
+
+  //     clearTimeout(timeout);
+  //     timeout = setTimeout(fnCall, ms);
+  //   };
+  // }
 
   function onClearInput() {
     setSearchValue("");
@@ -24,7 +29,7 @@ function SearchBlock() {
 
   const updateInput = React.useCallback(
     debounce((val) => {
-      setSearchValue(val);
+      dispatch(setSearchValue(val));
     }, 300),
     []
   );

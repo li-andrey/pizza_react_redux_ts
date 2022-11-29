@@ -2,43 +2,40 @@ import React from "react";
 import Categories from "../components/Categories";
 import Sort from "../components/Sort";
 import PizzaList from "../components/PizzaList";
-import { useSelector } from "react-redux";
-import axios from "axios";
-import { SearchContext } from "../App";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPizzas, pizzasSelector } from "../redux/slices/pizzasSlice";
+import { filterSelector } from "../redux/slices/filterSlice";
 
 function Home() {
-  const { categoryId, sortType } = useSelector((state) => state.filter);
-
-  const [pizzas, setPizzas] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const { searchValue } = React.useContext(SearchContext);
-
-  React.useEffect(() => {
-    setIsLoading(true);
+  const dispatch = useDispatch();
+  const { categoryId, sortType, searchValue } = useSelector(filterSelector);
+  const { items, status } = useSelector(pizzasSelector);
+  const getPizzas = async () => {
     const category = categoryId === 0 ? "" : `category=${categoryId}`;
     const sortBy = sortType.property.replace("-", "");
     const order = sortType.property.includes("-") ? "desc" : "asc";
-    axios
-      .get(
-        `https://637db4019c2635df8f8c982e.mockapi.io/pizzas?${category}&sortBy=${sortBy}&order=${order}`
-      )
-      .then((response) => {
-        setPizzas(response.data);
-        setIsLoading(false);
-      });
+    dispatch(fetchPizzas({ category, sortBy, order }));
+  };
+
+  React.useEffect(() => {
+    getPizzas();
     window.scrollTo(0, 0);
   }, [categoryId, sortType, searchValue]);
 
   return (
-    <div className="content">
-      <div className="container">
-        <div className="content__top">
-          <Categories />
-          <Sort />
-        </div>
-        <h2 className="content__title">Все пиццы</h2>
-        <PizzaList pizzas={pizzas} isLoading={isLoading} />
+    <div className="container">
+      <div className="content__top">
+        <Categories />
+        <Sort />
       </div>
+      <h2 className="content__title">Все пиццы</h2>
+      {status === "error" ? (
+        <div>
+          <h2>Ошибка запроса</h2>
+        </div>
+      ) : (
+        <PizzaList pizzas={items} isLoading={status} />
+      )}
     </div>
   );
 }
