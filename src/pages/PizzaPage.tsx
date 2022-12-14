@@ -2,9 +2,13 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function PizzaPage() {
+const PizzaPage : React.FC = () => {
+  const [pizza, setPizza] = React.useState<{
+    imageUrl: string,
+    title: string,
+    price: number
+  }>();
   const navigate = useNavigate();
-  const [pizza, setPizza] = React.useState();
   const { id } = useParams();
 
   React.useEffect(() => {

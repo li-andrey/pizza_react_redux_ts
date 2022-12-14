@@ -4,11 +4,11 @@ import debounce from "lodash.debounce";
 import { setSearchValue } from "../../redux/slices/filterSlice";
 import { useDispatch } from "react-redux";
 
-function SearchBlock() {
+const SearchBlock: React.FC = () => {
   const dispatch = useDispatch();
   const [value, setValue] = React.useState("");
 
-  const inputRef = React.useRef();
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   // function debounce(fn, ms) {
   //   let timeout;
@@ -21,10 +21,10 @@ function SearchBlock() {
   //   };
   // }
 
-  function onClearInput() {
+  function onClearInput(e: React.MouseEvent<SVGSVGElement>) {
     setSearchValue("");
     setValue("");
-    inputRef.current.focus();
+    inputRef.current?.focus();
   }
 
   const updateInput = React.useCallback(
@@ -34,7 +34,7 @@ function SearchBlock() {
     []
   );
 
-  function onChangeInput(e) {
+  function onChangeInput(e: React.ChangeEvent<HTMLInputElement>) {
     setValue(e.target.value);
     updateInput(e.target.value);
   }

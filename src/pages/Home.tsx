@@ -1,20 +1,22 @@
 import React from "react";
 import Categories from "../components/Categories";
-import Sort from "../components/Sort";
+import SortPopup from "../components/SortPopup";
 import PizzaList from "../components/PizzaList";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { fetchPizzas, pizzasSelector } from "../redux/slices/pizzasSlice";
 import { filterSelector } from "../redux/slices/filterSlice";
+import { useAppDispatch } from "../redux/store";
 
-function Home() {
-  const dispatch = useDispatch();
+const Home: React.FC = () => {
+  const dispatch = useAppDispatch();
   const { categoryId, sortType, searchValue } = useSelector(filterSelector);
   const { items, status } = useSelector(pizzasSelector);
   const getPizzas = async () => {
     const category = categoryId === 0 ? "" : `category=${categoryId}`;
     const sortBy = sortType.property.replace("-", "");
     const order = sortType.property.includes("-") ? "desc" : "asc";
-    dispatch(fetchPizzas({ category, sortBy, order }));
+    dispatch(
+      fetchPizzas({ category, sortBy, order }));
   };
 
   React.useEffect(() => {
@@ -26,7 +28,7 @@ function Home() {
     <div className="container">
       <div className="content__top">
         <Categories />
-        <Sort />
+        <SortPopup />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       {status === "error" ? (
