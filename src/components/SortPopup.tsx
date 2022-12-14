@@ -1,30 +1,38 @@
 import React, { useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSortType } from "../redux/slices/filterSlice";
+import { setSortType, SortProperty } from "../redux/slices/filterSlice";
 
-const sortList = [
-  { name: "популярности (возрастанию)", property: "rating" },
-  { name: "популярности (убыванию)", property: "-rating" },
-  { name: "цене (возрастанию)", property: "price" },
-  { name: "цене (убыванию)", property: "-price" },
-  { name: "алфавиту (возрастанию)", property: "title" },
-  { name: "алфавиту (убыванию)", property: "-title" },
+type SortItem = {
+  name: string;
+  property: SortProperty;
+}
+
+const sortList: SortItem[] = [
+  { name: "популярности (возрастанию)", property: SortProperty.Raiting_Desc },
+  { name: "популярности (убыванию)", property: SortProperty.Raiting_Asc },
+  { name: "цене (возрастанию)", property: SortProperty.Price_Desc },
+  { name: "цене (убыванию)", property: SortProperty.Price_Asc },
+  { name: "алфавиту (возрастанию)", property: SortProperty.Title_Desc },
+  { name: "алфавиту (убыванию)", property: SortProperty.Title_Asc },
 ];
 
-function Sort() {
+const SortPopup: React.FC = () => {
   const dispatch = useDispatch();
-  const sortType = useSelector((state) => state.filter.sortType);
-  const [open, setOpen] = React.useState();
-  const sortRef = useRef();
+  const sortType = useSelector((state: any) => state.filter.sortType);
+  const [open, setOpen] = React.useState(false);
+  const sortRef = useRef<HTMLDivElement>(null);
 
-  const chooseSort = (s) => {
+  const chooseSort = (s: SortItem) => {
     dispatch(setSortType(s));
     setOpen(!open);
   };
 
   useEffect(() => {
-    const onClickSort = (e) => {
-      if (!e.path.includes(sortRef.current)) {
+    const onClickSort = (e: MouseEvent) => {
+      const _e = e as MouseEvent & {
+        path: Node[]
+      }
+      if (sortRef.current && !_e.path.includes(sortRef.current)) {
         setOpen(false);
       }
     };
@@ -70,4 +78,4 @@ function Sort() {
     </div>
   );
 }
-export default Sort;
+export default SortPopup;

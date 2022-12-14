@@ -11,9 +11,9 @@ const arrCategories = [
   "Закрытые",
 ];
 
-function Categories() {
+const Categories: React.FC = () => {
   const dispatch = useDispatch();
-  const categoryId = useSelector((state) => state.filter.categoryId);
+  const categoryId = useSelector((state:any) => state.filter.categoryId);
 
   return (
     <div className="categories">
